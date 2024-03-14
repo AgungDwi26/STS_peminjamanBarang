@@ -1,36 +1,36 @@
 <?php
+
     $db_host = "localhost";
     $db_user = "root";
     $db_pass = "";
     $db_name = "sts_agung";
-    $connect = mysqli_connect($db_host, $db_user, $db_pass, $db_name) or die("Gagal terhubung dengan Database: " . mysqli_error($dbconnect));
+    $connect = mysqli_connect($db_host, $db_user, $db_pass, $db_name) or die("Gagal terhubung dengan Database: " . mysqli_connect_error());
 
 
     function checkLogin($username, $password){
-		global $connect; 
-		$uname = $username;
-		$upass = $password;		
-		$hasil = mysqli_query($connect,"select * from user where username='$uname' and password=md5('$upass')");
-		$cek = mysqli_num_rows($hasil);
-		if($cek > 0 ){
+        global $connect; 
+        $uname = mysqli_real_escape_string($connect, $username);
+        $upass = mysqli_real_escape_string($connect, $password);    
+        $hasil = mysqli_query($connect,"SELECT * FROM user WHERE username='$uname' and password=md5('$upass')");
+        $cek = mysqli_num_rows($hasil);
+        if($cek > 0 ){
             $query = mysqli_fetch_array($hasil);
             $_SESSION['id'] = $query['id'];
             $_SESSION['username'] = $query['username'];
             $_SESSION['role'] = $query['role'];
             $_SESSION['no_identitas'] = $query['no_identitas'];
-			return true;		
+            return true;        
         }
-		else {
-			return false;
-		}	
-	}
+        else {
+            return false;
+        }    
+    }
 
-    
-    
+
     function showdataUser()
     {
         global $connect;    
-        $hasil=mysqli_query($connect,"SELECT user.id, user.no_identitas, user.nama, user.status, user.username, user.role from user;");
+        $hasil=mysqli_query($connect,"SELECT id, no_identitas, nama, status, username, role FROM user");
         $rows=[];
         while($row = mysqli_fetch_assoc($hasil))
         {
@@ -42,7 +42,7 @@
     function showdataBarang()
     {
         global $connect;    
-        $hasil=mysqli_query($connect,"SELECT barang.id, barang.kode_barang, barang.nama_barang, barang.kategori, barang.merk, barang.jumlah from barang;");
+        $hasil=mysqli_query($connect,"SELECT id, kode_barang, nama_barang, kategori, merk, jumlah FROM barang");
         $rows=[];
         while($row = mysqli_fetch_assoc($hasil))
         {
@@ -54,29 +54,31 @@
 
     function showdataPeminjaman()
     {
-    global $connect;    
-    $hasil=mysqli_query($connect,"SELECT * FROM peminjaman");
-    $rows=[];
-    while($row = mysqli_fetch_assoc($hasil))
-    {
-        $rows[] = $row;
+        global $connect;    
+        $hasil=mysqli_query($connect,"SELECT * FROM peminjaman");
+        $rows=[];
+        while($row = mysqli_fetch_assoc($hasil))
+        {
+            $rows[] = $row;
+        }
+        return $rows;
     }
-    return $rows;
-    }
-    
-    
+
+
 
     function editData($tablename, $id)
     {
         global $connect;
-        $hasil=mysqli_query($connect,"select * from $tablename where id='$id'");
+        $id = mysqli_real_escape_string($connect, $id);
+        $hasil=mysqli_query($connect,"SELECT * FROM $tablename WHERE id='$id'");
         return $hasil;
     }
 
-    function delete($tablename,$id)
+    function deleteData($tablename,$id)
     {
         global $connect;
-        $hasil=mysqli_query($connect,"delete from $tablename where id='$id'");
+        $id = mysqli_real_escape_string($connect, $id);
+        $hasil=mysqli_query($connect,"DELETE FROM $tablename WHERE id='$id'");
         return $hasil;
     }
 

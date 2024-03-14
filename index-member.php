@@ -26,7 +26,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gray-900 sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index-member.php">
         <div class="sidebar-brand-text mx-3">Peminjaman Barang</div>
@@ -93,7 +93,7 @@
             <div class="input-group">
               <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
               <div class="input-group-append">
-                <button class="btn btn-secondary" type="button">
+                <button class="btn btn-primary" type="button">
                   <i class="fas fa-search fa-sm"></i>
                 </button>
               </div>
@@ -135,44 +135,15 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid ">
-            <h1 class="pb-5">Dashboard Member</h1>
+            <h1 class="pb-5">Halaman Utama</h1>
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">
                     <h1 class="display-4">Halo <?php echo $nama;?></h1>
-                    <p class="lead">Terima kasih telah mengunjungi situs web kami. Kami sangat menghargai kehadiran Anda di sini. Semoga Anda menemukan informasi yang berguna dan menarik selama menjelajahi halaman kami. Jangan ragu untuk menjelajahi konten kami dan jangan sungkan untuk menghubungi kami jika Anda memiliki pertanyaan atau masukan. Sekali lagi, selamat datang!</p>
+                    <p class="lead">Terimakasih telah mengunjungi web kami. Kami sangat menghargai anda sebagai konsumen kami, semoga web ini dapat membantu kegiatan sehari-hari anda!</p>
                 </div>
             </div>
             
-            <!-- Tabel Data Barang Sering Dipinjam -->
-            <div class="card shadow mb-4">
-                <div class="card-body py-3">
-                    <h6 class="m-0 font-weight-bold">Data Barang Sering Dipinjam</h6>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Kode Barang</th>
-                                    <th>Jumlah Pinjam</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                // Panggil fungsi getBarangSeringDipinjam() dari database.php
-                                $barang_sering_dipinjam = getBarangSeringDipinjam();
-                                foreach ($barang_sering_dipinjam as $barang) : 
-                                ?>
-                                <tr>
-                                    <td><?php echo $barang['kode_barang']; ?></td>
-                                    <td><?php echo $barang['jumlah_pinjam']; ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         </div>
         <!-- /.container-fluid -->

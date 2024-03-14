@@ -3,31 +3,20 @@ session_start();
 include "database.php";
 
 if(isset($_POST['pinjam'])) {
-    // Mendapatkan tanggal dan waktu saat ini
-    $tgl_pinjam = date('Y-m-d H:i:s'); // Format MySQL datetime untuk tanggal hari ini
-
-    // Mendapatkan no_identitas dari sesi yang sedang berjalan
+    $tgl_pinjam = date('Y-m-d H:i:s'); 
     $no_identitas = $_SESSION['no_identitas'];
-
-    // Mendapatkan id_login dari sesi yang sedang berjalan
-    $id_login = $_SESSION['id']; // Anda mungkin perlu menyesuaikan ini dengan kolom yang sesuai dari tabel pengguna
-
-    // Menyimpan data peminjaman ke database
+    $id_login = $_SESSION['id']; 
     $kode_barang = mysqli_real_escape_string($connect, $_POST['kode_barang']);
     $jumlah = mysqli_real_escape_string($connect, $_POST['jumlah']);
     $keperluan = mysqli_real_escape_string($connect, $_POST['keperluan']);
-
-    // Periksa ketersediaan barang
     $query_check = "SELECT jumlah FROM barang WHERE kode_barang = '$kode_barang'";
     $result_check = mysqli_query($connect, $query_check);
     $row_check = mysqli_fetch_assoc($result_check);
     $jumlah_tersedia = $row_check['jumlah'];
 
     if ($jumlah_tersedia >= $jumlah) {
-        // Kurangi jumlah barang di database
         $query_update = "UPDATE barang SET jumlah = jumlah - $jumlah WHERE kode_barang = '$kode_barang'";
         if (mysqli_query($connect, $query_update)) {
-            // Jika pengurangan jumlah barang berhasil, simpan data peminjaman
             $query_insert = "INSERT INTO peminjaman (no_identitas, kode_barang, jumlah, keperluan, tgl_pinjam, tgl_kembali, id_login) VALUES ('$no_identitas', '$kode_barang', '$jumlah', '$keperluan', '$tgl_pinjam', NULL, '$id_login')";
             if (mysqli_query($connect, $query_insert)) {
                 echo "";
@@ -83,9 +72,45 @@ if(isset($_POST['pinjam'])) {
             <div id="content">
 
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <div class=" container justify-content-end">
-                        <a href="logout.php"><button type="button" class="btn btn-outline-dark">Logout</button></a>
-                    </div>
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+                <ul class="navbar-nav ml-auto">
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username']; ?></span>
+                <img class="img-profile rounded-circle" src="resource/img/undraw_profile.svg" />
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Settings
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Activity Log
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="logout.php" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+          </ul>
                 </nav>
 
                 <div class="container-fluid">
@@ -126,7 +151,7 @@ if(isset($_POST['pinjam'])) {
     <div class="form-group">
         <input type="hidden" class="form-control form-control-user" name="id_login">
     </div>
-    <input type="submit" name="pinjam" class="btn btn-dark btn-user btn-block">
+    <input type="submit" name="pinjam" class="btn btn-primary btn-user btn-block">
 </form>
 
                 </div>
